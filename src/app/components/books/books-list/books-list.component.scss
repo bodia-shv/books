@@ -20,15 +20,6 @@ td.mat-cell {
   &-actions { width: 20%; }
 }
 
-.cover-image {
-  max-width: 40px;
-  width: 100%;
-  max-height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
-}
-
 .searching {
   transition: all 0.3s ease-in-out;
   transform: scale(1.01);
