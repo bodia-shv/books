@@ -1,3 +1,12 @@
+# NOTE
+
+If you have troubles with running this Books app, please remove your node_modules
+`rm rg node_modules`
+than clean the caches
+`npm cache clean --force`
+and install modules again
+`npm install`
+
 # Test
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.11.
