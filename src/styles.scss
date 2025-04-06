@@ -2,6 +2,7 @@
 
 @tailwind components;
 @tailwind utilities;
+@import './app/shared/styles/variables';
 
 html,
 body {
@@ -10,4 +11,29 @@ body {
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+/* Classes for truncating text that does not fit */
+.table-truncate {
+  &__wr {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+  }
+  &__text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Override disabled input text color */
+.mdc-text-field--outlined.mdc-text-field--disabled .mdc-text-field__input {
+  color: var(--mdc-dialog-supporting-text-color)!important;
 }

@@ -1,0 +1,86 @@
+<mat-toolbar mat-dialog-title class="dialog-header">
+  <span class="text-2xl font-semibold">{{ data.viewOnly ? 'Book Details' : data.book ? 'Edit Book' : 'Add New Book' }}</span>
+  <span class="toolbar-spacer flex-1"></span>
+  <button mat-icon-button (click)="onNoClick()">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="bookForm" class="form grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    <div *ngIf="previewImageUrl; else noCover" class="col-span-2 flex items-center justify-center">
+      <img [src]="previewImageUrl" alt="Cover Preview" class="size-24 object-cover rounded-full shadow-md block">
+    </div>
+
+    <ng-template #noCover>
+      <div class="col-span-2 flex items-center justify-center">
+        <div class="placeholder-preview__wr rounded-full border-1 border-solid border-gray-400 overflow-hidden bg-gray-100 size-24 flex items-center justify-center">
+          <img class="object-contain w-[24px] h-auto" src="/assets/empty-image-icon.svg" alt="no cover">
+        </div>
+      </div>
+    </ng-template>
+
+    <div *ngIf="!viewOnly" class="form__control--image col-span-2 flex items-center justify-center">
+      <ng-container>
+        <label for="coverImageInput" class="px-4 py-1 bg-gray-200 rounded-md custom-file-upload mat-raised-button mat-primary cursor-pointer">
+          <mat-icon class="align-bottom">cloud_upload</mat-icon>
+          Choose Cover Image
+        </label>
+        <input type="file" id="coverImageInput" accept="image/*" class="hidden" (change)="onFileSelected($event)">
+      </ng-container>
+      <span class="ml-2" *ngIf="bookForm.value.coverImageFile">{{ bookForm.value.coverImageFile.name }}</span>
+    </div>
+
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label>Author</mat-label>
+      <input matInput formControlName="author" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label>Year</mat-label>
+      <input matInput type="number" formControlName="year" required>
+      <mat-error *ngIf="bookForm.controls['year'].hasError('min')" class="text-red-500">Year must be at least 1000</mat-error>
+      <mat-error *ngIf="bookForm.controls['year'].hasError('max')" class="text-red-500">Year must be no later than 2024</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="col-span-2">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" class="resize-none"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-actions border-gray-200">
+  <ng-container *ngIf="!viewOnly; else viewModeActions">
+    <button color="warn" mat-button (click)="onNoClick()">
+      Cancel
+    </button>
+    <button 
+      *ngIf="!viewOnly"
+      mat-button 
+      [disabled]="!bookForm.valid || isUploading" 
+      class="px-4" 
+      (click)="onSubmit()"
+      cdkFocusInitial
+      >
+      {{ data.book ? 'Save' : 'Add' }}
+    </button>
+  </ng-container>
+</mat-dialog-actions>
+
+<ng-template #viewModeActions>
+  <button mat-button color="primary" (click)="startEditing()" *ngIf="data?.viewOnly">
+    <mat-icon>edit</mat-icon>
+    Edit
+  </button>
+  <button mat-button color="warn" (click)="deleteBook()" *ngIf="data?.viewOnly">
+    <mat-icon>delete</mat-icon>
+    Delete
+  </button>
+</ng-template>
